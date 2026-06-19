@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RARM: Confidence-Gated Progress Reward Modeling for RL in Manipulation</title>
+    <meta
+      name="description"
+      content="RARM: Confidence-Gated Progress Reward Modeling for RL in Manipulation. An open-source project."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/rarm_robot_sketch_transparent.svg" />
+    <link rel="stylesheet" href="css/omnireset-theme.css?v=20260614j" />
+    <link rel="stylesheet" href="css/main.css?v=20260614j" />
+  </head>
+  <body>
+    <a class="skip-link" href="#motivation">Skip to content</a>
+
+    <nav class="progress-sidebar" aria-label="Page progress">
+      <div class="progress-track">
+        <div class="progress-line"></div>
+        <div class="progress-line-fill"></div>
+        <div class="progress-item" data-section="top">
+          <a href="#top" data-nav="top"><span class="progress-dot"></span><span class="progress-label">Intro</span></a>
+        </div>
+        <div class="progress-item" data-section="motivation">
+          <a href="#motivation" data-nav="motivation"><span class="progress-dot"></span><span class="progress-label">Overview</span></a>
+        </div>
+        <div class="progress-item" data-section="method">
+          <a href="#method" data-nav="method"><span class="progress-dot"></span><span class="progress-label">Method</span></a>
+        </div>
+        <div class="progress-item" data-section="simulation">
+          <a href="#simulation" data-nav="simulation"><span class="progress-dot"></span><span class="progress-label">Simulation Experiments</span></a>
+        </div>
+        <div class="progress-item" data-section="realworld">
+          <a href="#realworld" data-nav="realworld"><span class="progress-dot"></span><span class="progress-label">Real-World Experiments</span></a>
+        </div>
+        <div class="progress-item" data-section="performance">
+          <a href="#performance" data-nav="performance"><span class="progress-dot"></span><span class="progress-label">Computational Cost</span></a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+
+      <!-- ── Hero ─────────────────────────────────────────────────────── -->
+      <section id="top" class="hero-flow" aria-labelledby="hero-title">
+        <div class="hero-orb" aria-hidden="true"></div>
+        <h1 id="hero-title" class="hero-text">
+          <img src="assets/rarm_robot_sketch_transparent.svg" alt="" class="hero-logo" aria-hidden="true" />RARM
+        </h1>
+        <p class="sub-hero-text">Confidence-Gated Progress Reward Modeling for RL in Manipulation</p>
+        <div class="authors">
+          Pengzhi Yang<sup>*</sup>, Xinyu Wang<sup>*</sup>, Pengyu Jing<sup>*</sup>, Kehan Wen<sup>*</sup>, Yiduo Qu, Zhenhao Huang, Minghao Fu, Xin Liu, Yaheng Shen, Fan Shi
+          <span class="author-note"><sup>*</sup> Equal contribution</span>
+        </div>
+        <figure class="hero-video" aria-hidden="true">
+          <video src="assets/video/title.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        </figure>
+        <div class="hero-waves" aria-hidden="true">
+          <svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path></defs>
+            <g class="wave-parallax">
+              <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(212,148,10,0.25)"></use>
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(147,51,234,0.2)"></use>
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(59,130,246,0.18)"></use>
+              <use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(37,99,235,0.25)"></use>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- ── Overview ──────────────────────────────────────────────────── -->
+      <div class="tagline" id="motivation">Overview</div>
+      <section class="section section-motivation card-surface section-card" aria-labelledby="motivation-title">
+        <h2 id="motivation-title" class="visually-hidden">Overview</h2>
+        <figure class="motivation-video" data-reveal>
+          <video data-src="assets/video/motivation.mp4" autoplay muted loop playsinline preload="none" controls></video>
+        </figure>
+        <h3 class="sub-title contributions-title" data-reveal>Our Contributions</h3>
+        <div class="contributions-list" data-reveal>
+          <div class="contribution-item">
+            <h4>Data-light, reference-anchored progress reward</h4>
+            <p>We introduce <strong>RARM</strong>, which turns a single successful demonstration into a dense progress reward with no task-specific reward supervision&mdash;achieving data-light, confidence-aware progress estimation where prior work meets only one of these criteria.</p>
+          </div>
+          <div class="contribution-item">
+            <h4>Confidence gating against reward hacking</h4>
+            <p>RARM rewards confident forward progress and explicitly filters out low-confidence matches, suppressing the false-positive rewards that drive reward hacking.</p>
+          </div>
+          <div class="contribution-item">
+            <h4>Best overall success with low overhead</h4>
+            <p>Across 9 simulated tasks (LIBERO, MetaWorld) and 4 real-world tasks, RARM achieves the best overall success rates with low-overhead reward queries, with especially large gains on long-horizon settings such as cloth folding.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Method ────────────────────────────────────────────────────── -->
+      <div class="tagline" id="method">Method</div>
+      <section class="section section-method card-surface section-card" aria-labelledby="method-title">
+        <h2 id="method-title" class="visually-hidden">Method</h2>
+        <figure class="method-figure" data-reveal>
+          <img src="assets/figures/method.png" alt="RARM method overview" loading="lazy" />
+          <figcaption class="method-caption">
+            <strong>Method Overview.</strong> <em>Reward Model Training:</em> As in (c), we sample an anchor clip from an unlabeled video, positives from the same temporal region, and negatives from three complementary sources. These pairs are scored by the comparator in (a), trained with a soft-nearest-neighbours loss. <em>RL Training:</em> Given a reference and a rollout video in (b), each rollout clip is compared with all reference clips to form the matrix in (d). Rather than using these similarities directly as rewards, RARM uses them to estimate where the rollout lies along the reference, reading progress from the best-matched reference clips. To avoid false-positive progress, this estimate is passed through a confidence gate in (e): uncertain matches are suppressed, so the policy is not rewarded when progress localization is unreliable. The policy is updated with the resulting reward as new rollouts are collected iteratively. The confidence threshold is computed once from self-comparisons within the reference demonstration, which sets how strong a valid match should be.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- ── Simulation Experiments ─────────────────────────────────────── -->
+      <div class="tagline" id="simulation">Simulation Experiments</div>
+
+      <section class="section section-simulation card-surface section-card" aria-label="Qualitative comparisons">
+        <h3 class="sub-title" data-reveal>Qualitative Comparisons</h3>
+        <p class="results-caption" data-reveal>
+          RARM's cumulative reward along a successful vs. a failed rollout of the
+          same task. This is the running total of RARM's reward, not a raw
+          progress estimate: RARM matches each clip against references with a
+          confidence gate, and adds +1 whenever a confident match beats the
+          highest progress reached so far. Hover the plot to scrub through the
+          rollout &mdash; the dots track each curve and the frames update to the
+          matching step.
+        </p>
+        <div class="qual-panel" data-reveal>
+          <div id="qualitative-grid" class="qualitative-grid"></div>
+          <div class="placeholder-box qual-fallback-msg">
+            <span>Qualitative comparison chart unavailable</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-simulation card-surface section-card" aria-label="Quantitative experiments">
+        <h3 class="sub-title" data-reveal>Quantitative Experiments</h3>
+        <p class="results-caption" data-reveal>
+          Success rate vs. environment steps on MetaWorld and LIBERO-10 tasks
+          (mean &plusmn; std over seeds) with Drq-v2 from scratch. Hover the legend to highlight a method;
+          click to toggle it.
+        </p>
+        <div class="results-panel" data-reveal>
+          <div id="results-legend" class="results-legend" aria-label="Method legend"></div>
+          <div id="results-grid" class="results-grid"></div>
+          <img
+            class="results-fallback-img"
+            src="assets/figures/quantitative_results.png"
+            alt="Success-rate curves for RARM (ours) and baselines across MetaWorld and LIBERO-10 tasks."
+          />
+        </div>
+      </section>
+
+      <section class="section section-simulation card-surface section-card" aria-label="Ablation">
+        <h3 class="sub-title" data-reveal>Ablation</h3>
+        <div class="ablation-grid" data-reveal>
+          <figure class="ablation-item">
+            <img src="assets/figures/abl_mw18.png" alt="Ablation success-rate curves on a MetaWorld task" loading="lazy" />
+            <figcaption>MetaWorld</figcaption>
+          </figure>
+          <figure class="ablation-item">
+            <img src="assets/figures/abl_lb2.png" alt="Ablation success-rate curves on a LIBERO-10 task" loading="lazy" />
+            <figcaption>LIBERO-10</figcaption>
+          </figure>
+        </div>
+        <p class="ablation-desc" data-reveal>
+          Each variant disables one part of RARM. The full model (blue) reaches a high success rate
+          the fastest and holds it. <strong>w/o Cross-Attn</strong> replaces the learned cross-attention
+          comparator with a simpler distance-based comparison, weakening rollout&ndash;reference matching
+          and degrading progress localization; <strong>w/o Temporal</strong> loses motion cues and rewards static
+          frames that merely look like success. The confidence gate is the key factor: without it
+          (<strong>w/o Gate</strong>) noisy frame matches inject spurious reward and convergence slows,
+          while an over-strict gate (<strong>Strict Gate</strong>) rejects too many frames and starves
+          the policy &mdash; both plateau well below RARM.
+        </p>
+      </section>
+
+      <!-- Commented out for now
+      <section class="section section-simulation card-surface section-card" aria-label="Additional experiment with world model">
+        <h3 class="sub-title" data-reveal>Additional Experiment with World Model</h3>
+        <div class="content-placeholder" data-reveal>
+          <div class="placeholder-box"><span>World model experiment results</span></div>
+        </div>
+      </section>
+      -->
+
+      <!-- ── Real-World Experiments ─────────────────────────────────────── -->
+      <div class="tagline" id="realworld">Real-World Experiments</div>
+
+      <!-- Sub-section: DSRL with RARM (videos) -->
+      <section class="section section-realworld card-surface section-card" aria-label="DSRL with RARM">
+        <h3 class="sub-title" data-reveal>DSRL with RARM</h3>
+        <div class="improvement-stack" data-reveal>
+          <figure class="improvement-item">
+            <figcaption class="improvement-video-title">Drawer Opening</figcaption>
+            <video data-src="assets/video/drawer.mov" autoplay muted loop playsinline preload="none" controls></video>
+          </figure>
+          <figure class="improvement-item">
+            <figcaption class="improvement-video-title">Pick and Place Eraser</figcaption>
+            <video data-src="assets/video/eraser.mov" autoplay muted loop playsinline preload="none" controls></video>
+          </figure>
+          <figure class="improvement-item">
+            <figcaption class="improvement-video-title">Handover</figcaption>
+            <video data-src="assets/video/handover.mov" autoplay muted loop playsinline preload="none" controls></video>
+          </figure>
+          <figure class="improvement-item">
+            <figcaption class="improvement-video-title">Clothes Folding</figcaption>
+            <video data-src="assets/video/clothes.mov" autoplay muted loop playsinline preload="none" controls></video>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Sub-section: Progress prediction on cloth folding -->
+      <section class="section section-realworld card-surface section-card" aria-label="Progress prediction on cloth folding tasks">
+        <h3 class="sub-title" data-reveal>Cumulative Predicted Reward on Clothes Folding</h3>
+        <figure class="filmstrip-figure" data-reveal>
+          <img src="assets/figures/filmstrip_reward.png" alt="Cumulative predicted reward on paired success and failure cloth-folding rollouts." loading="lazy" />
+        </figure>
+        <p class="filmstrip-desc" data-reveal>
+          Cumulative predicted reward on a paired success / failure cloth-folding rollout, normalized
+          per model by its own success-rollout final reward. Reward is accrued only when newly
+          estimated progress exceeds the previous highest estimate, so each curve is
+          <strong>monotonically non-decreasing</strong> &mdash; transient mis-predictions cannot
+          inflate it. Ours (red) tracks the linear oracle on success and saturates at just
+          <strong>0.50</strong> on failure, while every baseline assigns more than 80% of its success
+          reward to the failed rollout (GVL 0.97, Robometer 0.88, RoboDopamine 0.84, VIP 0.82) and
+          cannot separate the two. Removing the per-clip similarity threshold (<em>Ours w/o threshold</em>)
+          accepts every nearest-demo match as confident, and the failure rollout then earns
+          <em>more</em> reward than success (ratio &asymp;&nbsp;1.89) &mdash; confirming that
+          confidence-gated progress estimation is what makes success and failure distinguishable.
+        </p>
+      </section>
+
+      <!-- Sub-section: Real-World Success Rates (table) -->
+      <section class="section section-realworld card-surface section-card" aria-label="Real-world success rates">
+        <h3 class="sub-title" data-reveal>Real-World Success Rates</h3>
+        <div class="results-table-wrap" data-reveal>
+          <p class="results-table-caption">
+            Success rates over 10 evaluation rollouts before and after 30/60/90 DSRL training episodes.
+            <strong>w/o DSRL:</strong> base VLA policy.
+            <strong>BinR:</strong> DSRL with sparse binary success reward.
+            <strong>Ours:</strong> DSRL with the proposed RARM reward.
+          </p>
+          <div class="results-table-scroll">
+            <table class="results-table" aria-label="Real-world success rates">
+              <thead>
+                <tr>
+                  <th rowspan="2" class="col-task">Task</th>
+                  <th rowspan="2" class="col-base">w/o DSRL</th>
+                  <th colspan="2" class="col-group">30 rollouts</th>
+                  <th colspan="2" class="col-group">60 rollouts</th>
+                  <th colspan="2" class="col-group">90 rollouts</th>
+                </tr>
+                <tr>
+                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
+                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
+                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="col-task">Drawer open</td>
+                  <td>2/10</td>
+                  <td>4/10</td><td class="best">6/10</td>
+                  <td>6/10</td><td class="best">7/10</td>
+                  <td>8/10</td><td class="best">10/10</td>
+                </tr>
+                <tr>
+                  <td class="col-task">Pick eraser</td>
+                  <td>2/10</td>
+                  <td>3/10</td><td class="best">6/10</td>
+                  <td>5/10</td><td class="best">8/10</td>
+                  <td>8/10</td><td class="best">9/10</td>
+                </tr>
+                <tr>
+                  <td class="col-task">Hand over</td>
+                  <td>2/10</td>
+                  <td>2/10</td><td class="best">5/10</td>
+                  <td>4/10</td><td class="best">6/10</td>
+                  <td>5/10</td><td class="best">6/10</td>
+                </tr>
+                <tr>
+                  <td class="col-task">Clothes folding</td>
+                  <td>1/10</td>
+                  <td>0/10</td><td class="best">1/10</td>
+                  <td>1/10</td><td class="best">3/10</td>
+                  <td>2/10</td><td class="best">8/10</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="dsrl-arrow-row">
+                  <td colspan="2" class="dsrl-arrow-spacer"></td>
+                  <td colspan="6" class="dsrl-arrow-cell">
+                    <img src="assets/figures/real_world_experiments_arrow.png?v=2" alt="More DSRL rollouts collected over the course of RL training" loading="lazy" />
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sub-section: Robustness for RARM -->
+      <section class="section section-realworld card-surface section-card" aria-label="Robustness for RARM">
+        <h3 class="sub-title" data-reveal>Robustness for RARM</h3>
+        <p class="robustness-desc" data-reveal>
+          RARM produces stable progress estimates under diverse visual perturbations.
+          Starting from a successful bimanual clothes-folding rollout, we apply four augmentations
+          targeting distinct real-world modes and re-estimate progress against an unaltered reference.
+          In all cases the estimated progress closely tracks the ideal linear trend.
+        </p>
+
+        <!-- Reference demonstration strip -->
+        <div class="robustness-ref-label" data-reveal>Reference Demonstration — Task 4: Bimanual Clothes Folding</div>
+        <div class="ref-strip" data-reveal>
+          <figure class="ref-frame">
+            <img src="assets/figures/robustness/frame_0001.jpg" alt="Flat orange shirt" loading="lazy" />
+            <figcaption>Flat orange<br>shirt</figcaption>
+          </figure>
+          <figure class="ref-frame">
+            <img src="assets/figures/robustness/frame_0007.jpg" alt="Bimanual first fold" loading="lazy" />
+            <figcaption>Bimanual<br>first fold</figcaption>
+          </figure>
+          <figure class="ref-frame">
+            <img src="assets/figures/robustness/frame_0016.jpg" alt="Cooperative 45° rotation" loading="lazy" />
+            <figcaption>Cooperative<br>45° rotation</figcaption>
+          </figure>
+          <figure class="ref-frame">
+            <img src="assets/figures/robustness/frame_0023.jpg" alt="Left pinches near side" loading="lazy" />
+            <figcaption>Left pinches<br>near side</figcaption>
+          </figure>
+          <figure class="ref-frame">
+            <img src="assets/figures/robustness/frame_0031.jpg" alt="Final folded shape" loading="lazy" />
+            <figcaption>Final folded<br>shape</figcaption>
+          </figure>
+        </div>
+
+        <!-- Augmentation rows -->
+        <div class="aug-grid" data-reveal>
+
+          <div class="aug-row">
+            <div class="aug-left">
+              <div class="aug-label"><strong>Augment 1 — Glare</strong><span>blinding white spots</span></div>
+              <div class="aug-frames">
+                <img src="assets/figures/robustness/frame_0001_aug1.jpg" alt="Glare aug frame 1" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0016_aug1.jpg" alt="Glare aug frame 16" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0031_aug1.jpg" alt="Glare aug frame 31" loading="lazy" />
+              </div>
+            </div>
+            <div class="aug-heatmap">
+              <img src="assets/figures/robustness/heatmap_1_frames_aug1_progress.png" alt="Progress estimate under glare augmentation" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="aug-row">
+            <div class="aug-left">
+              <div class="aug-label"><strong>Augment 2 — Color Shift</strong><span>green filter</span></div>
+              <div class="aug-frames">
+                <img src="assets/figures/robustness/frame_0001_aug2.jpg" alt="Color shift aug frame 1" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0016_aug2.jpg" alt="Color shift aug frame 16" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0031_aug2.jpg" alt="Color shift aug frame 31" loading="lazy" />
+              </div>
+            </div>
+            <div class="aug-heatmap">
+              <img src="assets/figures/robustness/heatmap_1_frames_aug2_progress.png" alt="Progress estimate under color shift augmentation" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="aug-row">
+            <div class="aug-left">
+              <div class="aug-label"><strong>Augment 3 — Occlusion</strong><span>black box overlay</span></div>
+              <div class="aug-frames">
+                <img src="assets/figures/robustness/frame_0001_aug3.jpg" alt="Occlusion aug frame 1" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0016_aug3.jpg" alt="Occlusion aug frame 16" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0031_aug3.jpg" alt="Occlusion aug frame 31" loading="lazy" />
+              </div>
+            </div>
+            <div class="aug-heatmap">
+              <img src="assets/figures/robustness/heatmap_1_frames_aug3_progress.png" alt="Progress estimate under occlusion augmentation" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="aug-row">
+            <div class="aug-left">
+              <div class="aug-label"><strong>Augment 4 — Viewpoint</strong><span>perspective pitch &amp; yaw</span></div>
+              <div class="aug-frames">
+                <img src="assets/figures/robustness/frame_0001_aug4.jpg" alt="Viewpoint aug frame 1" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0016_aug4.jpg" alt="Viewpoint aug frame 16" loading="lazy" />
+                <img src="assets/figures/robustness/frame_0031_aug4.jpg" alt="Viewpoint aug frame 31" loading="lazy" />
+              </div>
+            </div>
+            <div class="aug-heatmap">
+              <img src="assets/figures/robustness/heatmap_1_frames_aug4_progress.png" alt="Progress estimate under viewpoint augmentation" loading="lazy" />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Computational Cost ─────────────────────────────────────────── -->
+      <div class="tagline" id="performance">Computational Cost</div>
+
+      <section class="section section-performance card-surface section-card" aria-label="Inference speed and GPU cost">
+        <h3 class="sub-title" data-reveal>Inference Speed and GPU Cost</h3>
+        <div class="results-table-wrap" data-reveal>
+          <p class="results-table-caption">
+            Per-frame inference cost and peak GPU memory across reward model baselines,
+            measured over 125 frames (one rollout trajectory).
+            RARM matches the fastest vision-encoder baselines while using far less memory than VLM-based methods.
+          </p>
+          <div class="results-table-scroll">
+            <table class="results-table perf-table" aria-label="Inference cost comparison">
+              <thead>
+                <tr>
+                  <th class="col-task">Baseline</th>
+                  <th>ms / frame</th>
+                  <th>Mem (MB)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="col-task">GVL</td>
+                  <td>&lt;50</td>
+                  <td>&approx;13 200</td>
+                </tr>
+                <tr>
+                  <td class="col-task">Robometer</td>
+                  <td>&lt;100</td>
+                  <td>&approx;13 200</td>
+                </tr>
+                <tr>
+                  <td class="col-task">RoboDopamine</td>
+                  <td>&lt;300</td>
+                  <td>&approx;19 000</td>
+                </tr>
+                <tr>
+                  <td class="col-task">VIP</td>
+                  <td>&lt;10</td>
+                  <td>&approx;4 200</td>
+                </tr>
+                <tr>
+                  <td class="col-task">RoboCLIP</td>
+                  <td>&lt;10</td>
+                  <td>&approx;5 400</td>
+                </tr>
+                <tr>
+                  <td class="col-task">TemporalOT</td>
+                  <td>&lt;10</td>
+                  <td>&approx;6 600</td>
+                </tr>
+                <tr class="our-row">
+                  <td class="col-task">RARM (Ours)</td>
+                  <td>&lt;10</td>
+                  <td>&approx;5 100</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── BibTeX ─────────────────────────────────────────────────────── -->
+      <div id="paper" class="tagline">BibTeX</div>
+      <footer class="site-footer">
+        <div class="bibtex-code">
+          <pre class="citation-block"><code>@misc{yang2026rarm,
+  title  = {RARM: Confidence-Gated Progress Reward Modeling for RL in Manipulation},
+  author = {Yang, Pengzhi and Wang, Xinyu and Jing, Pengyu and Wen, Kehan and Qu, Yiduo and Huang, Zhenhao and Fu, Minghao and Liu, Xin and Shen, Yaheng and Shi, Fan},
+  year   = {2026}
+}</code></pre>
+        </div>
+      </footer>
+
+    </main>
+
+    <div class="footer">
+      Website template adapted from
+      <a href="https://sim-dist.github.io/" target="_blank" rel="noreferrer">SimDist</a>,
+      which was adapted from
+      <a href="https://omnireset.github.io/" target="_blank" rel="noreferrer">OmniReset</a>.
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/results-charts.js"></script>
+    <script src="js/qualitative-chart.js"></script>
+  </body>
+</html>
