@@ -379,6 +379,16 @@ a {
   color: var(--text-primary);
 }
 
+.abstract-text {
+  margin: 0 auto 32px;
+  max-width: 880px;
+  padding: 0 24px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  text-align: justify;
+}
+
 /* ── Ablation figures (two in a row) ──────────────────────────────────── */
 
 .ablation-grid {
