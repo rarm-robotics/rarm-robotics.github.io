@@ -10,7 +10,7 @@
     />
     <link rel="icon" type="image/svg+xml" href="assets/rarm_robot_sketch_transparent.svg" />
     <link rel="stylesheet" href="css/omnireset-theme.css?v=20260614j" />
-    <link rel="stylesheet" href="css/main.css?v=20260620a" />
+    <link rel="stylesheet" href="css/main.css?v=20260620b" />
   </head>
   <body>
     <a class="skip-link" href="#motivation">Skip to content</a>
@@ -50,8 +50,9 @@
         </h1>
         <p class="sub-hero-text">Confidence-Gated Progress Reward Modeling for RL in Manipulation</p>
         <div class="authors">
-          Pengzhi Yang<sup>*</sup>, Xinyu Wang<sup>*</sup>, Pengyu Jing<sup>*</sup>, Kehan Wen<sup>*</sup>, Yiduo Qu, Zhenhao Huang, Minghao Fu, Xin Liu, Yaheng Shen, Fan Shi
-          <span class="author-note"><sup>*</sup> Equal contribution</span>
+          <a href="https://pengzhi1998.github.io/" target="_blank" rel="noreferrer">Pengzhi Yang</a><sup>&dagger;*</sup>, Xinyu Wang<sup>&Dagger;*</sup>, Pengyu Jing<sup>&dagger;*</sup>, Kehan Wen<sup>&dagger;*</sup>, Yiduo Qu<sup>&sect;</sup>, Zhenhao Huang<sup>&dagger;</sup>, Minghao Fu<sup>&para;</sup>, Xin Liu<sup>&dagger;</sup>, Yaheng Shen<sup>&dagger;</sup>, <a href="https://fanshi14.github.io/me/" target="_blank" rel="noreferrer">Fan Shi</a><sup>&dagger;</sup>
+          <span class="affiliation"><sup>&dagger;</sup>&nbsp;<a href="https://nus-hcrl.github.io/" target="_blank" rel="noreferrer">NUS Human-Centered Robotic Lab</a> &nbsp;&middot;&nbsp; <sup>&Dagger;</sup>&nbsp;Booking.com &nbsp;&middot;&nbsp; <sup>&sect;</sup>&nbsp;University of Cambridge &nbsp;&middot;&nbsp; <sup>&para;</sup>&nbsp;School of Artificial Intelligence, Nanjing University</span>
+          <span class="author-note"><sup>*</sup>&nbsp;Equal contribution</span>
         </div>
         <figure class="hero-video" aria-hidden="true">
           <video src="assets/video/title.mp4" autoplay muted loop playsinline preload="metadata"></video>
@@ -77,7 +78,7 @@
         <figure class="motivation-video" data-reveal>
           <video data-src="assets/video/motivation.mp4" autoplay muted loop playsinline preload="none" controls></video>
         </figure>
-        <h3 class="sub-title" data-reveal>Abstract</h3>
+        <h3 class="sub-title abstract-title" data-reveal>Abstract</h3>
         <p class="abstract-text" data-reveal>
           Reinforcement learning for robot manipulation is often bottlenecked by reward design, especially in long-horizon tasks: sparse success rewards provide weak supervision, while hand-crafted dense rewards are tedious to design and generalize poorly across tasks. Progress-based reward models offer a promising alternative by estimating how far an observation has advanced toward task completion, but existing approaches often require task-specific demonstrations or progress labels, and can assign high rewards to visually plausible but physically incorrect states. We introduce the Reference-Anchored Reward Model (RARM), a lightweight visual comparator that converts a single successful demonstration into a dense, progress-aware reward. RARM is trained once on general-purpose videos with a contrastive temporal objective, requiring no robot-specific data, task-specific reward labels, or per-task reward engineering. At deployment, RARM matches rollout clips to reference clips and rewards only confident forward progress, suppressing uncertain matches that may otherwise produce false-positive rewards. Across 9 simulated manipulation tasks from LIBERO and MetaWorld and 4 real-world tasks, RARM achieves the best overall success rates in subsequent RL training, with particularly large gains on long-horizon tasks such as cloth folding, where unreliable progress estimates are especially harmful.
         </p>
