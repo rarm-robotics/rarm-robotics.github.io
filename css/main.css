@@ -74,13 +74,43 @@ a {
 }
 
 .hero-actions {
+  position: relative;
+  z-index: 2; /* sit above the title video, which tucks up with a negative margin */
+  display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto 54px;
 }
 
 .hero-actions .cta {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  padding: 11px 20px;
+  font-size: 14px;
+}
+
+.hero-actions .cta-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.hero-actions .cta.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero-actions .cta .cta-soon {
+  margin-left: 2px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .hero-conference-badge {
