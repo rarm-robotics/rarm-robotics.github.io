@@ -357,7 +357,8 @@ a {
   line-height: 0;
 }
 
-.method-figure img {
+.method-figure img,
+.method-figure video {
   width: 100%;
   display: block;
   border-radius: 24px;
