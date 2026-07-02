@@ -104,7 +104,7 @@
       <section class="section section-method card-surface section-card" aria-labelledby="method-title">
         <h2 id="method-title" class="visually-hidden">Method</h2>
         <figure class="method-figure" data-reveal>
-          <img src="assets/figures/method.png" alt="RARM method overview" loading="lazy" />
+          <video data-src="assets/video/method.mp4" autoplay muted loop playsinline preload="none" controls></video>
           <figcaption class="method-caption">
             <strong>Method Overview.</strong> <em>Reward Model Training:</em> As in (c), we sample an anchor clip from an unlabeled video, positives from the same temporal region, and negatives from three complementary sources. These pairs are scored by the comparator in (a), trained with a soft-nearest-neighbours loss. <em>RL Training:</em> Given a reference and a rollout video in (b), each rollout clip is compared with all reference clips to form the matrix in (d). Rather than using these similarities directly as rewards, RARM uses them to estimate where the rollout lies along the reference, reading progress from the best-matched reference clips. To avoid false-positive progress, this estimate is passed through a confidence gate in (e): uncertain matches are suppressed, so the policy is not rewarded when progress localization is unreliable. The policy is updated with the resulting reward as new rollouts are collected iteratively. The confidence threshold is computed once from self-comparisons within the reference demonstration, which sets how strong a valid match should be.
           </figcaption>
