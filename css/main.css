@@ -633,6 +633,10 @@ a {
   max-width: 720px;
 }
 
+.results-table-note {
+  margin: 16px auto 0;
+}
+
 .results-table-scroll {
   overflow-x: auto;
   border-radius: 14px;
