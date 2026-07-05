@@ -422,6 +422,19 @@ h6,
   color: var(--honey-bronze);
 }
 
+.cta.twitter {
+  background: #1d9bf0;
+  border-color: #1d9bf0;
+  color: #fff;
+  font-weight: 600;
+}
+
+.cta.twitter:hover {
+  background: #1a8cd8;
+  border-color: #1a8cd8;
+  box-shadow: 0 12px 32px rgba(29, 155, 240, 0.35);
+}
+
 .cta.dark {
   background: var(--text-primary);
   border-color: var(--text-primary);
