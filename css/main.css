@@ -363,6 +363,39 @@ a {
 
 /* ── Sub-section title (shared across all sections) ──────────────────── */
 
+/* Two-level section numbering, driven entirely by CSS counters so that
+   inserting, moving or commenting out a section renumbers everything
+   automatically:
+
+     .tagline   → I, II, III …   (Overview, Method, Simulation Experiments …)
+     .sub-title → a, b, c …      (restarts inside each tagline group)
+
+   Taglines and sections are siblings under .main-content, so resetting the
+   subsection counter on each .tagline scopes it to the sections that follow.
+   Opt a heading out with .tagline-unnumbered / .sub-title-unnumbered. */
+.main-content {
+  counter-reset: bigsection;
+}
+
+.tagline {
+  counter-reset: subsection;
+}
+
+.tagline:not(.tagline-unnumbered) {
+  counter-increment: bigsection;
+}
+
+/* The theme sets .tagline::before { display: none } — re-enable it here. */
+.tagline:not(.tagline-unnumbered)::before {
+  display: inline;
+  content: counter(bigsection, upper-roman) ". ";
+}
+
+.sub-title:not(.sub-title-unnumbered)::before {
+  counter-increment: subsection;
+  content: counter(subsection, lower-alpha) ". ";
+}
+
 .sub-title,
 .rw-subtitle {
   font-family: 'Space Grotesk', -apple-system, sans-serif;
@@ -1182,4 +1215,46 @@ a {
     flex: 1 1 0;
     min-width: 0;
   }
+}
+
+/* ── Error recovery viewer ────────────────────────────────────────────── */
+/* Reuses .qual-card / .qual-controls / .qual-select from the qualitative
+   section so the two viewers stay visually identical; only the media stage
+   below the dropdown is specific to this section. */
+
+.er-fallback-msg {
+  display: none;
+}
+
+.er-panel.er-fallback .error-recovery-grid {
+  display: none;
+}
+
+.er-panel.er-fallback .er-fallback-msg {
+  display: flex;
+}
+
+.er-stage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.er-video {
+  width: 100%;
+  /* Footage is square (1024x1024); cap it so it never dominates the page. */
+  max-width: 520px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-elevated);
+  display: block;
+}
+
+.er-stat {
+  margin: 2px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
 }

@@ -66,7 +66,7 @@
 
     <link rel="icon" type="image/svg+xml" href="assets/rarm_robot_sketch_transparent.svg" />
     <link rel="stylesheet" href="css/omnireset-theme.css?v=20260614j" />
-    <link rel="stylesheet" href="css/main.css?v=20260620b" />
+    <link rel="stylesheet" href="css/main.css?v=20260813a" />
   </head>
   <body>
     <a class="skip-link" href="#motivation">Skip to content</a>
@@ -254,6 +254,26 @@
         </div>
       </section>
       -->
+
+      <!-- Sub-section: Error Recovery Experiments -->
+      <section class="section section-simulation card-surface section-card" aria-label="Error recovery experiments">
+        <h3 class="sub-title" data-reveal>Error Recovery Experiments</h3>
+        <p class="results-caption" data-reveal>
+          Policies trained with RARM recover when the scene changes underneath them.
+          Mid-rollout, the target object is teleported to a random position within
+          4&nbsp;cm of where it started &mdash; invalidating the approach the policy was
+          already committed to. The moment of the reset is marked by an orange card held
+          for one second. In every clip the policy re-localises the displaced object,
+          re-plans its approach, and still completes the task. Select a task to view its
+          rollout.
+        </p>
+        <div class="er-panel" data-reveal>
+          <div id="error-recovery-grid" class="error-recovery-grid"></div>
+          <div class="placeholder-box er-fallback-msg">
+            <span>Error recovery footage unavailable</span>
+          </div>
+        </div>
+      </section>
 
       <!-- ── Real-World Experiments ─────────────────────────────────────── -->
       <div class="tagline" id="realworld">Real-World Experiments</div>
@@ -555,5 +575,6 @@
     <script src="js/main.js"></script>
     <script src="js/results-charts.js"></script>
     <script src="js/qualitative-chart.js"></script>
+    <script src="js/error-recovery.js"></script>
   </body>
 </html>

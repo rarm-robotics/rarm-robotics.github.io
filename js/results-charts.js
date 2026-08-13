@@ -28,6 +28,7 @@
     RoboMeter: "#e377c2",
     RoboDopamine: "#ff7f0e",
     AblationSim: "#9f6559",
+    "Binary Reward": "#4a4a4a",
   };
 
   const RESULTS_METHOD_PRIORITY = [
@@ -38,6 +39,7 @@
     "RoboMeter",
     "RoboDopamine",
     "AblationSim",
+    "Binary Reward",
   ];
 
   const OURS_KEY = "RARM (ours)";
