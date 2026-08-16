@@ -776,8 +776,8 @@ a {
 
 .results-table th.col-binr,
 .results-table td:nth-child(3),
-.results-table td:nth-child(5),
-.results-table td:nth-child(7) {
+.results-table td:nth-child(6),
+.results-table td:nth-child(9) {
   border-left: 1px solid var(--border-subtle);
 }
 

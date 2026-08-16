@@ -327,9 +327,10 @@
         <h3 class="sub-title" data-reveal>Real-World Success Rates</h3>
         <div class="results-table-wrap" data-reveal>
           <p class="results-table-caption">
-            Success rates over 10 evaluation rollouts before and after 30/60/90 DSRL training episodes.
+            Success rates over 30 evaluation rollouts before and after 30/60/90 DSRL training episodes.
             <strong>w/o DSRL:</strong> base VLA policy.
             <strong>BinR:</strong> DSRL with sparse binary success reward.
+            <strong>RoboM:</strong> DSRL with the RoboMeter reward.
             <strong>Ours:</strong> DSRL with the proposed RARM reward.
           </p>
           <div class="results-table-scroll">
@@ -338,50 +339,50 @@
                 <tr>
                   <th rowspan="2" class="col-task">Task</th>
                   <th rowspan="2" class="col-base">w/o DSRL</th>
-                  <th colspan="2" class="col-group">30 rollouts</th>
-                  <th colspan="2" class="col-group">60 rollouts</th>
-                  <th colspan="2" class="col-group">90 rollouts</th>
+                  <th colspan="3" class="col-group">30 rollouts</th>
+                  <th colspan="3" class="col-group">60 rollouts</th>
+                  <th colspan="3" class="col-group">90 rollouts</th>
                 </tr>
                 <tr>
-                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
-                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
-                  <th class="col-binr">BinR</th><th class="col-ours">Ours</th>
+                  <th class="col-binr">BinR</th><th class="col-robo">RoboM</th><th class="col-ours">Ours</th>
+                  <th class="col-binr">BinR</th><th class="col-robo">RoboM</th><th class="col-ours">Ours</th>
+                  <th class="col-binr">BinR</th><th class="col-robo">RoboM</th><th class="col-ours">Ours</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="col-task">Drawer open</td>
-                  <td>2/10</td>
-                  <td>4/10</td><td class="best">6/10</td>
-                  <td>6/10</td><td class="best">7/10</td>
-                  <td>8/10</td><td class="best">10/10</td>
+                  <td>10/30</td>
+                  <td>16/30</td><td>17/30</td><td class="best">19/30</td>
+                  <td>19/30</td><td>18/30</td><td class="best">23/30</td>
+                  <td>23/30</td><td>20/30</td><td class="best">29/30</td>
                 </tr>
                 <tr>
                   <td class="col-task">Pick eraser</td>
-                  <td>2/10</td>
-                  <td>3/10</td><td class="best">6/10</td>
-                  <td>5/10</td><td class="best">8/10</td>
-                  <td>8/10</td><td class="best">9/10</td>
+                  <td>5/30</td>
+                  <td>9/30</td><td>13/30</td><td class="best">17/30</td>
+                  <td>15/30</td><td>17/30</td><td class="best">21/30</td>
+                  <td>20/30</td><td>20/30</td><td class="best">25/30</td>
                 </tr>
                 <tr>
                   <td class="col-task">Hand over</td>
-                  <td>2/10</td>
-                  <td>2/10</td><td class="best">5/10</td>
-                  <td>4/10</td><td class="best">6/10</td>
-                  <td>5/10</td><td class="best">6/10</td>
+                  <td>2/30</td>
+                  <td>5/30</td><td>3/30</td><td class="best">14/30</td>
+                  <td>12/30</td><td>4/30</td><td class="best">22/30</td>
+                  <td>14/30</td><td>5/30</td><td class="best">23/30</td>
                 </tr>
                 <tr>
                   <td class="col-task">Clothes folding</td>
-                  <td>1/10</td>
-                  <td>0/10</td><td class="best">1/10</td>
-                  <td>1/10</td><td class="best">3/10</td>
-                  <td>2/10</td><td class="best">8/10</td>
+                  <td>2/30</td>
+                  <td>2/30</td><td class="best">4/30</td><td class="best">4/30</td>
+                  <td>3/30</td><td>9/30</td><td class="best">12/30</td>
+                  <td>7/30</td><td>9/30</td><td class="best">25/30</td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr class="dsrl-arrow-row">
                   <td colspan="2" class="dsrl-arrow-spacer"></td>
-                  <td colspan="6" class="dsrl-arrow-cell">
+                  <td colspan="9" class="dsrl-arrow-cell">
                     <img src="assets/figures/real_world_experiments_arrow.png?v=2" alt="More DSRL rollouts collected over the course of RL training" loading="lazy" />
                   </td>
                 </tr>
